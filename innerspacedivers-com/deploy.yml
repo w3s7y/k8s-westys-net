@@ -55,8 +55,8 @@ kind: Ingress
 metadata:
   name: innerspace-divers-web-ingress
   namespace: isd
-  annotations:
-    nginx.ingress.kubernetes.io/app-root: /index
+  # annotations:
+  #   nginx.ingress.kubernetes.io/app-root: /index
 spec:
   rules:
   - host: www.innerspacedivers.com
