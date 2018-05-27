@@ -18,7 +18,7 @@ spec:
     metadata:
       labels:
         app: innerspace-divers-web-app
-        version: "d2e9bcce5460096973afa321bf6996186e644af7"
+        version: "06980315a11c09bbd134c04ab477568108485f2b"
     spec:
       containers:
       - name: jekyll
@@ -34,7 +34,7 @@ spec:
       - name: git-isd-volume
         gitRepo:
           repository: "https://github.com/w3s7y/innerspacedivers.git"
-          revision: "d2e9bcce5460096973afa321bf6996186e644af7"
+          revision: "06980315a11c09bbd134c04ab477568108485f2b"
 
 ---
 kind: Service
@@ -55,8 +55,6 @@ kind: Ingress
 metadata:
   name: innerspace-divers-web-ingress
   namespace: isd
-  # annotations:
-  #   nginx.ingress.kubernetes.io/app-root: /index
 spec:
   rules:
   - host: www.innerspacedivers.com
