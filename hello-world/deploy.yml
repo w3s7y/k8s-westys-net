@@ -10,7 +10,7 @@ metadata:
   name: hello-world-html
   namespace: hello-world
 data: 
-  hello: |-
+  index: |-
     <html><head>
     <title>Hello World</title>
     </head><body>
@@ -51,8 +51,8 @@ spec:
           configMap:
             name: hello-world-html
             items:
-              - key: hello
-                path: hello.html
+              - key: index
+                path: index.html
               - key: otherpage
                 path: other.html
 
@@ -75,10 +75,6 @@ kind: Ingress
 metadata:
   name: hello-ingress
   namespace: hello-world
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-    #nginx.ingress.kubernetes.io/app-root: /
-    kubernetes.io/ingress.class: ""
 spec:
   rules:
   - host: k8s.westys.net

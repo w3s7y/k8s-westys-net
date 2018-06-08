@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: innerspace-divers-api-deployment
+  namespace: isd
+spec:
+  selector:
+    matchLabels:
+      app: innerspace-divers-api
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: innerspace-divers-api
+        version: "00d8b673e91b917a14a81f1cc03389b9f38fb120"
+    spec:
+      containers:
+      - name: flask
+        image: tiangolo/uwsgi-nginx-flask:python3.6
+        command: ["/bin/sh"]
+        args: ["-c", "cp /github/innerspacedivers-api/isd_api_server.py /app/main.py; /entrypoint.sh; exec /usr/bin/supervisord"]
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /github
+          name: git-isd-volume
+      volumes:
+      - name: git-isd-volume
+        gitRepo:
+          repository: "https://github.com/w3s7y/innerspacedivers-api.git"
+          revision: "00d8b673e91b917a14a81f1cc03389b9f38fb120"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: innerspace-divers-api-service
+  namespace: isd
+spec:
+  selector:
+    app: innerspace-divers-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: innerspace-divers-api-ingress
+  namespace: isd
+spec:
+  rules:
+  - host: www.innerspacedivers.com
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: innerspace-divers-api-service
+          servicePort: 80

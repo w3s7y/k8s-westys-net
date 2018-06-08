@@ -1,2 +1,4 @@
 .idea
 service-l7.yaml
+k8s_id_rsa
+k8s_id_rsa.pub
