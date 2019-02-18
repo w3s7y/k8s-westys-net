@@ -18,12 +18,12 @@ spec:
     metadata:
       labels:
         app: innerspace-divers-web-app
-        version: "694429fc5b65fec8f29f846400ffc217a57661e6"
+        version: "fe8f3f2d3829bfe360fcf8839874b76be1e392ab"
     spec:
       containers:
       - name: jekyll
         image: jekyll/jekyll:3.8
-        command: ["/bin/sh"]
+        command: ["/bin/bash"]
         args: ["-c", "bundle install --gemfile=/github/innerspacedivers/Gemfile; jekyll build -s /github/innerspacedivers -d /srv/jekyll; jekyll serve"]
         ports:
         - containerPort: 4000
@@ -35,13 +35,13 @@ spec:
             memory: "32Mi"
             cpu: "10m"
           limits:
-            memory: "128Mi"
-            cpu: "50m"
+            memory: "256Mi"
+            cpu: "100m"
       volumes:
       - name: git-isd-volume
         gitRepo:
           repository: "https://github.com/w3s7y/innerspacedivers.git"
-          revision: "694429fc5b65fec8f29f846400ffc217a57661e6"
+          revision: "fe8f3f2d3829bfe360fcf8839874b76be1e392ab"
 
 ---
 kind: Service
