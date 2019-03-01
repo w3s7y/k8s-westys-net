@@ -18,7 +18,7 @@ spec:
     metadata:
       labels:
         app: innerspace-divers-web-app
-        version: "fe8f3f2d3829bfe360fcf8839874b76be1e392ab"
+        version: "528be4176f87c4261dc34be300e4bd673bf2f97c"
     spec:
       containers:
       - name: jekyll
@@ -41,7 +41,7 @@ spec:
       - name: git-isd-volume
         gitRepo:
           repository: "https://github.com/w3s7y/innerspacedivers.git"
-          revision: "fe8f3f2d3829bfe360fcf8839874b76be1e392ab"
+          revision: "528be4176f87c4261dc34be300e4bd673bf2f97c"
 
 ---
 kind: Service
