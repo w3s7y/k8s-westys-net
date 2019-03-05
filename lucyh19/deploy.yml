@@ -15,7 +15,7 @@ data:
     <title>Lucys Internetz</title>
     </head><body>
     <h1>Hello Lucy.... I am in AWS :p</h1>
-    <h2>P.S. your boyfrreind loves you very much xx</h2>
+    <h2>love you very much xx</h2>
     </body></html>
 ---
 apiVersion: apps/v1
