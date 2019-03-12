@@ -1,4 +1,12 @@
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+  namespace: isd
+data:
+  sns_endpoint: 'arn:aws:sns:eu-west-1:838280859751:innerspace-divers-topic'
+---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -13,7 +21,7 @@ spec:
     metadata:
       labels:
         app: innerspace-divers-api
-        version: "6570a22654c1151a496a46926219740f2f233ae0"
+        version: "3ceae6d5012e10ee1157e28fc386ea1afa0ed6c2"
     spec:
       containers:
       - name: flask
@@ -32,11 +40,17 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "50m"
+        env:
+          - name: SNS_TOPIC
+            valueFrom:
+              configMapKeyRef:
+                name: api-config
+                key: sns_endpoint
       volumes:
       - name: git-isd-volume
         gitRepo:
           repository: "https://github.com/w3s7y/innerspacedivers-api.git"
-          revision: "6570a22654c1151a496a46926219740f2f233ae0"
+          revision: "3ceae6d5012e10ee1157e28fc386ea1afa0ed6c2"
 
 ---
 kind: Service
