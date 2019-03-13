@@ -7,7 +7,7 @@ metadata:
 data:
   sns_endpoint: 'arn:aws:sns:eu-west-1:838280859751:innerspace-divers-topic'
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: innerspace-divers-api-deployment
@@ -21,7 +21,7 @@ spec:
     metadata:
       labels:
         app: innerspace-divers-api
-        version: "061d6452ac009f98297b1c83c911250b1756e8e9"
+        version: "85718b2290b3a6776ec76c11ee516802536f051b"
     spec:
       containers:
       - name: flask
@@ -50,7 +50,7 @@ spec:
       - name: git-isd-volume
         gitRepo:
           repository: "https://github.com/w3s7y/innerspacedivers-api.git"
-          revision: "061d6452ac009f98297b1c83c911250b1756e8e9"
+          revision: "85718b2290b3a6776ec76c11ee516802536f051b"
 
 ---
 kind: Service
@@ -71,6 +71,8 @@ kind: Ingress
 metadata:
   name: innerspace-divers-api-ingress
   namespace: isd
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   rules:
   - host: www.innerspacedivers.com
