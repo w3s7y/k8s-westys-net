@@ -1,0 +1,84 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-config
+  namespace: preprod-isd
+data:
+  sns_endpoint: 'arn:aws:sns:eu-west-1:838280859751:preprod-innerspace-divers-topic'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: innerspace-divers-api-deployment
+  namespace: preprod-isd
+spec:
+  selector:
+    matchLabels:
+      app: innerspace-divers-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: innerspace-divers-api
+        version: "85718b2290b3a6776ec76c11ee516802536f051b"
+    spec:
+      containers:
+      - name: flask
+        image: tiangolo/uwsgi-nginx-flask:python3.6
+        command: ["/bin/sh"]
+        args: ["-c", "pip install boto3; cp /github/innerspacedivers-api/isd_api_server.py /app/main.py; /entrypoint.sh; exec /usr/bin/supervisord"]
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /github
+          name: git-isd-volume
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "10m"
+          limits:
+            memory: "128Mi"
+            cpu: "50m"
+        env:
+          - name: SNS_TOPIC
+            valueFrom:
+              configMapKeyRef:
+                name: api-config
+                key: sns_endpoint
+      volumes:
+      - name: git-isd-volume
+        gitRepo:
+          repository: "https://github.com/w3s7y/innerspacedivers-api.git"
+          revision: "85718b2290b3a6776ec76c11ee516802536f051b"
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: innerspace-divers-api-service
+  namespace: preprod-isd
+spec:
+  selector:
+    app: innerspace-divers-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: innerspace-divers-api-ingress
+  namespace: preprod-isd
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+  - host: preprod.innerspacedivers.com
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: innerspace-divers-api-service
+          servicePort: 80
